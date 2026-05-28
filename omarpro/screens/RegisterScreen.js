@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
-export default function SettingsScreen() {
+export default function RegisterScreen() {
   return (
     <View>
       <Text variant="headlineMedium">

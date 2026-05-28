@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
-export default function SettingsScreen() {
+export default function EventsScreen() {
   return (
     <View style={styles.container}>
       <Text variant="headlineMedium" style={styles.title}>
