@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
-import { ActivityIndicator, Button, Card, Chip, Text, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Button, Card, Chip, Text, Searchbar, TextInput } from 'react-native-paper';
 
 export default function HomeScreen({ navigation }) {
 
-    const [text, setText] = React.useState("");
+    const [searchQuery, setSearchQuery] = React.useState("");
 //Remote data here
 const [events, setEvents] = React.useState([]);
 const [loading, setLoading] = React.useState(false); //Add cool spin animation part2
@@ -54,12 +54,13 @@ React.useEffect(() => {
                     >View Today's Events</Button>
                 </Card.Content>
             </Card>
-            <TextInput
+            <Searchbar
                 style={styles.card}
-                textColor='#424754'
-                label="Search Events..."
-                value={text}
-                onChangeText={text => setText(text)}
+                inputStyle={{ color:'#424754' }}
+                placeholderTextColor="gray"
+                placeholder="Search Events..."
+                onChangeText={setSearchQuery}
+                value={searchQuery}
             />
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Chip style={styles.chip} textStyle={styles.chip}>Athletics</Chip>

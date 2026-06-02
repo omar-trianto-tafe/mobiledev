@@ -1,5 +1,5 @@
 import {View, StyleSheet} from "react-native";
-import { Text, Card, Button } from "react-native-paper";
+import { Text, Card, Button, Icon } from "react-native-paper";
 
 export default function DetailsScreen({ route, navigation }){
     const { item } = route.params;
@@ -17,6 +17,30 @@ export default function DetailsScreen({ route, navigation }){
                     </Text>
                 </Card.Content>
             </Card>
+
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Icon
+                    source="clock"
+                    size={16}
+                />
+                <Text> {item.startTime}-{item.endTime} </Text>
+
+                <Icon
+                    source="map-marker"
+                    size={16}
+                />
+                <Text> {item.location} </Text>
+            </View>
+
+            <Button
+                mode="contained"
+                onPress={() => navigation.navigate('Register', { item: item })}
+                style={styles.button}
+                buttonColor="#DDAB5E"
+                textColor="#424754"
+            >
+                Register
+            </Button>
             <Button
                 mode="contained"
                 onPress={() => navigation.goBack()}
