@@ -43,12 +43,20 @@ export default function App() {
       <PaperProvider>
           <NavigationContainer>
             <Tab.Navigator
-              screenOptions={{
-                tabBarActiveTintColor: '#424754',
-                tabBarInactiveTintColor: '#999',
-                headerStyle: {backgroundColor: '#3CA6E5'},
-                headerTintColor: '#424754',
-              }}
+              screenOptions={({ navigation }) => ({
+                    tabBarActiveTintColor: '#424754',
+                    tabBarInactiveTintColor: '#999',
+                    headerStyle: {backgroundColor: '#3CA6E5'},
+                    headerTintColor: '#424754',
+                    headerRight: () => (
+                      <IconButton 
+                        icon="cog"
+                        size={30}
+                        iconColor='#424754'
+                        onPress={ () => navigation.navigate('Settings')}
+                      />
+                    ),
+                })}
             >
 
             <Tab.Screen name="Home" component={HomeStack} options={{headerShown: false}} />
