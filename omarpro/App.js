@@ -61,7 +61,9 @@ export default function App() {
 
             <Tab.Screen name="Home" component={HomeStack} options={{headerShown: false}} />
             <Tab.Screen name="Events" component={EventsScreen}/>
-            
+            <Tab.Screen name="Details" component={DetailsScreen} options={{tabBarButton: (props) => null}}/>
+            <Tab.Screen name="Register" component={RegisterScreen} options={{tabBarButton: (props) => null}}/>
+            <Tab.Screen name="Settings" component={SettingsScreen} options={{tabBarButton: (props) => null}}/>
             
             </Tab.Navigator>
           </NavigationContainer>
