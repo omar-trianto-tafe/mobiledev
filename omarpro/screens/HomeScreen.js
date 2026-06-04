@@ -1,15 +1,17 @@
 import * as React from 'react';
+import AsyncStorage  from '@react-native-async-storage/async-storage';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { ActivityIndicator, Button, Card, Chip, Text, Searchbar, TextInput } from 'react-native-paper';
 
 export default function HomeScreen({ navigation }) {
 
-//Remote data here
+// calls for remote data here
 const [events, setEvents] = React.useState([]);
 const [loading, setLoading] = React.useState(false); //Add cool spin animation part2
 const [error, setError] = React.useState('');
 
 const EVENTS_URL = 'https://tafeshaun.github.io/elevate-data/events.json';
+const EVENT_KEY = 'cached_events';
 
 const loadEvents = async () => {
     try{
@@ -17,7 +19,7 @@ const loadEvents = async () => {
         setError('');
         const response = await fetch(EVENTS_URL);
         if(!response.ok){
-            throw new Error('Network response failed. Panic!')
+            throw new Error('Network response failed.')
         }
         const text = await response.text();
         const cleaned = text.replace(/^\uFEFF/, ''); //Clean
@@ -25,7 +27,7 @@ const loadEvents = async () => {
         setEvents(data);
     }
     catch (e){
-        setError('Could not load any events. Check git connection and maybe panic more');
+        setError('Could not load any events.');
         console.error(e);
     }
     finally {
@@ -34,14 +36,29 @@ const loadEvents = async () => {
  
 }
 
+// aysnc call if load fails > use cache first
+const loadCached = async () => {
+    try{
+        const rawEvent = await AsyncStorage.getItem(EVENT_KEY);
+        if(rawEvent)
+        {
+            setEvents(JSON.parse(rawEvent))
+        }
+    }
+    catch (e){
+        console.warn('Failed to load cached event data', e);
+    }
+};
+
 React.useEffect(() => {
-    loadEvents();
+    loadCached(); //CACHED DATA
+    loadEvents(); // REMOTE DATA
 }, []);
 
     const [searchQuery, setSearchQuery] = React.useState("");
     const [filteredData, setFilteredData] = React.useState(events);
 
-    // Filter events by title or date based on search query
+    // filter events by title or date based on search query
     const filteredEvents = events.filter(e => {
         const q = searchQuery.toLowerCase();
         return (
@@ -49,6 +66,20 @@ React.useEffect(() => {
         e.date.toLowerCase().includes(q)
         );
     });
+
+    // make chips selectable
+    const [selectedChips, setSelectedChips] = React.useState([]);
+
+    const tags = ['Athletics', 'Today', 'Fitness', 'Music', 'Social', 'Outdoors', 'Family'];
+
+    const handlePress = (tag) => {
+        if (selectedChips.includes(tag)) {
+            setSelectedChips(selectedChips.filter((item) => item !== tag));
+        } 
+        else {
+            setSelectedChips([...selectedChips, tag]);
+        }
+    };
 
     return (
         <ScrollView style={styles.container}>
@@ -74,13 +105,18 @@ React.useEffect(() => {
                 onChangeText={setSearchQuery}
             />
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Chip style={styles.chip} textStyle={styles.chip}>Athletics</Chip>
-                <Chip style={styles.chip} textStyle={styles.chip}>Today</Chip>
-                <Chip style={styles.chip} textStyle={styles.chip}>Fitness</Chip>
-                <Chip style={styles.chip} textStyle={styles.chip}>Music</Chip>
-                <Chip style={styles.chip} textStyle={styles.chip}>Social</Chip>
-                <Chip style={styles.chip} textStyle={styles.chip}>Outdoors</Chip>
-                <Chip style={styles.chip} textStyle={styles.chip}>Family</Chip>
+                {tags.map((tag) => (
+                    <Chip
+                    key={tag}
+                    selected={selectedChips.includes(tag)}
+                    onPress={() => handlePress(tag)}
+                    style={styles.chip}
+                    textStyle={styles.chip}
+                    selectedColor="#DDAB5E" 
+                    >
+                        {tag}
+                    </Chip>
+                ))}
             </View>
 
             <Text variant='bodyMedium' style={{ marginLeft: 12 }}>
