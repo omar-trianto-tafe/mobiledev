@@ -58,8 +58,8 @@ export default function RegisterScreen({ route, navigation }) {
                   mode="contained"
                   onPress={() => alert(`${fullName} registered to event ${item.title}`)}
                   style={styles.button}
-                  buttonColor="#3CA6E5"
-                  textColor="#F5F5F5"
+                  buttonColor="#DDAB5E"
+                  textColor="#424754"
               >
                   Submit Registration
               </Button>

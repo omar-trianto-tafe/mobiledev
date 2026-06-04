@@ -4,7 +4,6 @@ import { ActivityIndicator, Button, Card, Chip, Text, Searchbar, TextInput } fro
 
 export default function HomeScreen({ navigation }) {
 
-    const [searchQuery, setSearchQuery] = React.useState("");
 //Remote data here
 const [events, setEvents] = React.useState([]);
 const [loading, setLoading] = React.useState(false); //Add cool spin animation part2
@@ -39,6 +38,18 @@ React.useEffect(() => {
     loadEvents();
 }, []);
 
+    const [searchQuery, setSearchQuery] = React.useState("");
+    const [filteredData, setFilteredData] = React.useState(events);
+
+    // Filter events by title or date based on search query
+    const filteredEvents = events.filter(e => {
+        const q = searchQuery.toLowerCase();
+        return (
+        e.title.toLowerCase().includes(q) ||
+        e.date.toLowerCase().includes(q)
+        );
+    });
+
     return (
         <ScrollView style={styles.container}>
             <Card style={styles.card}>
@@ -59,8 +70,8 @@ React.useEffect(() => {
                 inputStyle={{ color:'#424754' }}
                 placeholderTextColor="gray"
                 placeholder="Search Events..."
-                onChangeText={setSearchQuery}
                 value={searchQuery}
+                onChangeText={setSearchQuery}
             />
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Chip style={styles.chip} textStyle={styles.chip}>Athletics</Chip>
@@ -72,13 +83,17 @@ React.useEffect(() => {
                 <Chip style={styles.chip} textStyle={styles.chip}>Family</Chip>
             </View>
 
+            <Text variant='bodyMedium' style={{ marginLeft: 12 }}>
+                Showing {filteredEvents.length} event(s)
+            </Text>
+
 {/* ADD ERROR MSG HERE FOR LATER TESTING */}
 {!!error && <Text style={{color: '#ff0000'}}>{error}</Text>}
 
 {/* Add cool spin animation part2 */}
 {loading && <ActivityIndicator animating size="large" style={{ marginTop: 80 }} />}
 
-{events.map(event => (
+{filteredEvents.map(event => (
 <Card
     key={String(event.id)}
     style={styles.card}
