@@ -1,15 +1,20 @@
 import {View, StyleSheet} from "react-native";
 import { Text, Card, Button, Icon } from "react-native-paper";
+import { useTheme } from '../ThemeContext';
 
 export default function DetailsScreen({ route, navigation }){
     const { item } = route.params;
 
+    const { colors } = useTheme();
+
     return(
-        <View style={styles.container}>
-            <Card style={styles.card}>
-                <Card.Title title={item.title} subtitle="Detail View" titleStyle={styles.body} subtitleStyle={styles.body}/>
+        <View style={[styles.container, {backgroundColor: colors.primary}]}>
+            <Card style={[styles.card, {backgroundColor: colors.background}]}>
+                <Card.Title title={item.title} subtitle="Detail View" 
+                    titleStyle={{color: colors.text}}
+                    subtitleStyle={{color: colors.text}}/>
                 <Card.Content>
-                    <Text variant="bodyLarge" style={styles.description}>
+                    <Text variant="bodyLarge" style={[styles.description, {color: colors.text}]}>
                         {item.description}
                     </Text>
                     <Text variant="bodySmall" style={styles.meta}>
@@ -23,13 +28,13 @@ export default function DetailsScreen({ route, navigation }){
                     source="clock"
                     size={16}
                 />
-                <Text> {item.startTime}-{item.endTime} </Text>
+                <Text style={{color: '#F5F5F5'}}> {item.startTime}-{item.endTime} </Text>
 
                 <Icon
                     source="map-marker"
                     size={16}
                 />
-                <Text> {item.location} </Text>
+                <Text style={{color: '#F5F5F5'}}> {item.location} </Text>
             </View>
 
             <Button
@@ -56,10 +61,9 @@ export default function DetailsScreen({ route, navigation }){
 }
 
 const styles = StyleSheet.create({
-  container:   {flex: 1, padding: 8, backgroundColor: '#3CA6E5',},
-  body:        { color: '#424754' },
-  card:        { backgroundColor: '#F5F5F5', margin: 12 },
-  description: { marginBottom: 8, color: "#424754" },
+  container:   { flex: 1, padding: 8 },
+  card:        { margin: 12 },
+  description: { marginBottom: 8 },
   meta:        { color: "#999" },
   button:      { marginTop: 8},
 });

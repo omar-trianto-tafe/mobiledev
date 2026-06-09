@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider as PaperProvider, IconButton} from 'react-native-paper';
 
+import { useTheme, ThemeProvider } from './ThemeContext';
+
 import HomeScreen from "./screens/HomeScreen";
 import EventsScreen from "./screens/EventsScreen";
 import DetailsScreen from "./screens/DetailsScreen";
@@ -40,33 +42,35 @@ function HomeStack() {
 
 export default function App() {
   return (
-      <PaperProvider>
-          <NavigationContainer>
-            <Tab.Navigator
-              screenOptions={({ navigation }) => ({
-                    tabBarActiveTintColor: '#424754',
-                    tabBarInactiveTintColor: '#999',
-                    headerStyle: {backgroundColor: '#3CA6E5'},
-                    headerTintColor: '#424754',
-                    headerRight: () => (
-                      <IconButton 
-                        icon="cog"
-                        size={30}
-                        iconColor='#424754'
-                        onPress={ () => navigation.navigate('Settings')}
-                      />
-                    ),
-                })}
-            >
+    <ThemeProvider>
+          <PaperProvider>
+            <NavigationContainer>
+              <Tab.Navigator
+                screenOptions={({ navigation }) => ({
+                      tabBarActiveTintColor: '#424754',
+                      tabBarInactiveTintColor: '#999',
+                      headerStyle: {backgroundColor: '#3CA6E5'},
+                      headerTintColor: '#424754',
+                      headerRight: () => (
+                        <IconButton 
+                          icon="cog"
+                          size={30}
+                          iconColor='#424754'
+                          onPress={ () => navigation.navigate('Settings')}
+                        />
+                      ),
+                  })}
+              >
 
-            <Tab.Screen name="Home" component={HomeStack} options={{headerShown: false}} />
-            <Tab.Screen name="Events" component={EventsScreen}/>
-            <Tab.Screen name="Details" component={DetailsScreen} options={{tabBarButton: (props) => null}}/>
-            <Tab.Screen name="Register" component={RegisterScreen} options={{tabBarButton: (props) => null}}/>
-            <Tab.Screen name="Settings" component={SettingsScreen} options={{tabBarButton: (props) => null}}/>
-            
-            </Tab.Navigator>
-          </NavigationContainer>
-      </PaperProvider>
+              <Tab.Screen name="Home" component={HomeStack} options={{headerShown: false}} />
+              <Tab.Screen name="Events" component={EventsScreen}/>
+              <Tab.Screen name="Details" component={DetailsScreen} options={{tabBarButton: (props) => null}}/>
+              <Tab.Screen name="Register" component={RegisterScreen} options={{tabBarButton: (props) => null}}/>
+              <Tab.Screen name="Settings" component={SettingsScreen} options={{tabBarButton: (props) => null}}/>
+              
+              </Tab.Navigator>
+            </NavigationContainer>
+        </PaperProvider>
+    </ThemeProvider>
   );
 }

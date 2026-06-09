@@ -2,8 +2,10 @@ import * as React from 'react';
 import AsyncStorage  from '@react-native-async-storage/async-storage';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { ActivityIndicator, Button, Card, Chip, Text, Searchbar, TextInput } from 'react-native-paper';
+import { useTheme } from '../ThemeContext';
 
 export default function HomeScreen({ navigation }) {
+    const { colors } = useTheme();
 
 // calls for remote data here
 const [events, setEvents] = React.useState([]);
@@ -82,23 +84,23 @@ React.useEffect(() => {
     };
 
     return (
-        <ScrollView style={styles.container}>
-            <Card style={styles.card}>
+        <ScrollView style={[styles.container, {backgroundColor: colors.primary}]}>
+            <Card style={[styles.card, {backgroundColor: colors.background}]}>
                 <Card.Content>
-                    <Text variant="headlineMedium" style={styles.title}>
+                    <Text variant="headlineMedium" style={[styles.title, {color: colors.text}]}>
                         Welcome
                     </Text>
-                    <Text variant="bodyLarge" style={styles.body}>
+                    <Text variant="bodyLarge" style={{color: colors.text}}>
                         Find and register for Community Events
                     </Text>
-                    <Button mode='outlined' style={{marginTop: '20px'}} textColor='#424754'
+                    <Button mode='outlined' style={{marginTop: '20px'}} textColor={colors.text}
                         onPress={() => navigation.navigate('Events')}
                     >View Today's Events</Button>
                 </Card.Content>
             </Card>
             <Searchbar
-                style={styles.card}
-                inputStyle={{ color:'#424754' }}
+                style={[styles.card, {backgroundColor: colors.background}]}
+                inputStyle={{ color: colors.text }}
                 placeholderTextColor="gray"
                 placeholder="Search Events..."
                 value={searchQuery}
@@ -110,8 +112,8 @@ React.useEffect(() => {
                     key={tag}
                     selected={selectedChips.includes(tag)}
                     onPress={() => handlePress(tag)}
-                    style={styles.chip}
-                    textStyle={styles.chip}
+                    style={[styles.chip, {backgroundColor: colors.background}]}
+                    textStyle={{color: colors.text}}
                     selectedColor="#DDAB5E" 
                     >
                         {tag}
@@ -119,7 +121,7 @@ React.useEffect(() => {
                 ))}
             </View>
 
-            <Text variant='bodyMedium' style={{ marginLeft: 12 }}>
+            <Text variant='bodyMedium' style={{ marginLeft: 12, color: colors.text }}>
                 Showing {filteredEvents.length} event(s)
             </Text>
 
@@ -132,13 +134,13 @@ React.useEffect(() => {
 {filteredEvents.map(event => (
 <Card
     key={String(event.id)}
-    style={styles.card}
+    style={[styles.card, {backgroundColor: colors.background}]}
     onPress={() => navigation.navigate("Details", { item: event })} //PARAMS!
 >
     {/* Added subtitle to show date field from the remote JSON */}
-    <Card.Title title={event.title} subtitle={event.date} titleStyle={styles.body} subtitleStyle={styles.body}/>
+    <Card.Title title={event.title} subtitle={event.date} titleStyle={{color: colors.text}} subtitleStyle={{color: colors.text}}/>
         <Card.Content>
-            <Text variant="bodyMedium" style={styles.body}>{event.description}</Text>
+            <Text variant="bodyMedium" style={{color: colors.text}}>{event.description}</Text>
         </Card.Content>
 </Card>
 ))}
@@ -149,9 +151,8 @@ React.useEffect(() => {
 }
 
 const styles = StyleSheet.create({
-    container:  {flex: 1, padding: 8, backgroundColor: '#3CA6E5',},
-    title:      { marginBottom: 12, fontWeight: 'bold', color: '#424754' },
-    body:       { color: '#424754' },
-    card:       { backgroundColor: '#F5F5F5', margin: 12 },
-    chip:       { backgroundColor: '#F5F5F5', color: '#424754', margin: 4 },
+    container:  {flex: 1, padding: 8,},
+    title:      { marginBottom: 12, fontWeight: 'bold', },
+    card:       { margin: 12 },
+    chip:       { margin: 4 },
 });
