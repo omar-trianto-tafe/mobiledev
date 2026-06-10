@@ -1,6 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Image } from 'react-native';
 import { Provider as PaperProvider, IconButton} from 'react-native-paper';
 
 import { useTheme, ThemeProvider } from './ThemeContext';
@@ -15,11 +16,23 @@ import RegisterScreen from "./screens/RegisterScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-//Track stack pop-on and pop-off
+// logo component
+function HeaderLogo() {
+  return (
+    <Image
+      style={{ width: 83, height: 32, resizeMode: 'contain' }}
+      source={require('./assets/Logo.jpg')}
+    />
+  );
+}
+
+// track stack pop-on and pop-off
 function HomeStack() {
+  const { colors } = useTheme();
+
   return(
     <Stack.Navigator screenOptions={({ navigation }) => ({
-            headerStyle: { backgroundColor: '#3CA6E5'},
+            headerStyle: { backgroundColor: colors.primary },
             headerTintColor: '#424754',
             headerRight: () => (
               <IconButton 
@@ -31,7 +44,12 @@ function HomeStack() {
             )
         }) 
       }>
-      <Stack.Screen name="Home" component={HomeScreen}/>
+      <Stack.Screen name="Home" component={HomeScreen}
+        options={{
+          headerTitle: () => <HeaderLogo />,
+          headerTitleAlign: 'center',
+        }}
+      />
       <Stack.Screen name="Details" component={DetailsScreen}/>
       <Stack.Screen name="Register" component={RegisterScreen}/>
       <Stack.Screen name="Settings" component={SettingsScreen}/>
