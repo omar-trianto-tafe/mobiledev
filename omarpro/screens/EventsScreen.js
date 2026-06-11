@@ -1,7 +1,7 @@
 import * as React from 'react';
 import AsyncStorage  from '@react-native-async-storage/async-storage';
-import { ScrollView, View, StyleSheet } from 'react-native';
-import { ActivityIndicator, Button, Card, Chip, Text, Searchbar, TextInput } from 'react-native-paper';
+import { ScrollView, View, StyleSheet, Alert, Platform } from 'react-native';
+import { ActivityIndicator, Button, Card, Chip, Text, Searchbar, TextInput, IconButton } from 'react-native-paper';
 import { useTheme } from '../ThemeContext';
 
 const STORAGE_KEY = 'cached_events';
@@ -53,6 +53,30 @@ loadLocalEvents();
         }
     };
 
+    // Delete
+    const deleteEvent = async (id) => {
+        const buttons = [
+            { text: 'Cancel', style: 'cancel' },
+            {
+                text: 'Delete',
+                style: 'destructive',
+                onPress: async () => {
+                    const updated = events.filter(e => e.id !== id);
+                    setEvents(updated);
+                    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+                },
+            },
+        ];
+        // check platform since Alert.alert doesn't work on web, only on mobile
+        if (Platform.OS === 'web') {
+            if (window.confirm('Delete Event — Are you sure?')) {
+            await buttons[1].onPress();
+            }
+        } else {
+            Alert.alert('Delete Event', 'Are you sure?', buttons);
+        }
+        };
+
     return (
         <ScrollView style={[styles.container, {backgroundColor: colors.primary}]}>
             <Card style={[styles.card, {backgroundColor: colors.background}]}>
@@ -100,12 +124,28 @@ loadLocalEvents();
 <Card
     key={String(event.id)}
     style={[styles.card, {backgroundColor: colors.background}]}
-    onPress={() => navigation.navigate("Details", { item: event })} //PARAMS!
 >
     {/* Added subtitle to show date field from the remote JSON */}
     <Card.Title title={event.title} subtitle={event.date} titleStyle={{color: colors.text}} subtitleStyle={{color: colors.text}}/>
         <Card.Content>
             <Text variant="bodyMedium" style={{color: colors.text}}>{event.description}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <IconButton
+                  icon='eye'
+                  iconColor={colors.text}
+                  onPress={() => navigation.navigate("Details", { item: event })} //PARAMS!
+                />
+                <IconButton
+                  icon='pencil-outline'
+                  iconColor={colors.text}
+                  //onPress={() => startEdit(event)}
+                />
+                <IconButton
+                  icon='delete-outline'
+                  iconColor='crimson'
+                  onPress={() => deleteEvent(event.id)}
+                />
+              </View>
         </Card.Content>
 </Card>
 ))}
