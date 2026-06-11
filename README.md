@@ -17,7 +17,10 @@ Event manager application to view, register, and manage events.
 5. Press 'w' to run in web view
 
 ## Screenshots
-(Add 2–3 screenshots of your app here)
+![Main Page](/omarpro/docs/screenshots/01_main_page.png?raw=true "Main Page")
+![Details Page](/omarpro/docs/screenshots/02_details_page.png?raw=true "Details Page")
+![Register Page](/omarpro/docs/screenshots/03_register_page.png?raw=true "Register Page")
+![Settings Page](/omarpro/docs/screenshots/04_settings_page.png?raw=true "Settings Page")
 
 ## Author
 Omar Trianto
